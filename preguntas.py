@@ -11,7 +11,14 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+import csv
 
+def leer_data_csv():
+    with open("data.csv", "r") as file:
+        data = list(csv.reader(file, delimiter="\t"))
+        # for row in data:
+        #     print(row)
+    return data
 
 def pregunta_01():
     """
@@ -21,7 +28,12 @@ def pregunta_01():
     214
 
     """
-    return
+    data = leer_data_csv()
+    suma = 0
+
+    for row in data:
+        suma += int(row[1])
+    return suma
 
 
 def pregunta_02():
@@ -39,7 +51,20 @@ def pregunta_02():
     ]
 
     """
-    return
+    # Inicializar un diccionario para almacenar las palabras y sus frecuencias
+    data = leer_data_csv()
+    words_p2 = {} # Crea un diccionario vacio
+    
+    # Iterar sobre cada fila del archivo CSV
+    for i in data:
+        if i[0] in words_p2.keys(): # Si la primera palabara ya existe en el diccionario se incrementa 1
+            words_p2[i[0]] += 1
+        else:
+            words_p2[i[0]] = 1 # Si la primera palabra no existe en el diccionario se inica con 1
+    
+    # Devuelve una lista de tuplas (keys,values), ordenadas alfabéticamente por las claves. 
+    sorted_words_p2 = sorted(words_p2.items())
+    return sorted_words_p2
 
 
 def pregunta_03():
@@ -57,7 +82,16 @@ def pregunta_03():
     ]
 
     """
-    return
+    data = leer_data_csv()
+    words_p3 = {}
+
+    for i in data:
+        if i[0] in words_p3.keys():
+            words_p3[i[0]] += int(i[1])
+        else:
+            words_p3[i[0]] = int(i[1])
+    sorted_words_p3 = sorted(words_p3.items())
+    return sorted_words_p3
 
 
 def pregunta_04():
@@ -82,7 +116,17 @@ def pregunta_04():
     ]
 
     """
-    return
+    data = leer_data_csv()
+    months = {}
+
+    for i in data:
+        month = i[2].split("-")[1] # Se obtiene el mes de la tercera colunmna
+        if month in months.keys():
+            months[month] += 1
+        else:
+            months[month] = 1
+    sorted_months = sorted(months.items())
+    return sorted_months
 
 
 def pregunta_05():
@@ -100,7 +144,28 @@ def pregunta_05():
     ]
 
     """
-    return
+    data = leer_data_csv ()
+    word_value = {}
+
+    for i in data:
+        word = i[0]  # Obtener la letra de la columna 1
+        value = int(i[1])  # Obtener el valor de la columna 2
+            # Si la letra ya está en el diccionario, se agrega el valor a la lista existente
+        if word in word_value:
+            word_value [word].append(value)
+        else:
+            word_value[word] = [value]
+
+    # Lista vacia para almacenar las tuplas de resultado
+    resultado = []
+
+# Iterar sobre el diccionario y encontrar el valor máximo y mínimo por cada letra
+    for words, values in word_value.items():
+            valor_max = max(values)
+            valor_min = min(values)
+            resultado.append((words, valor_max, valor_min))
+            resultado_ordenado_p5 = sorted(list(resultado))
+    return (resultado_ordenado_p5)
 
 
 def pregunta_06():
@@ -125,7 +190,30 @@ def pregunta_06():
     ]
 
     """
-    return
+    data = leer_data_csv ()
+    word_value = {}
+
+    # Iterar sobre cada fila del archivo CSV
+    for i in data:
+        diccionario_codificado = i[4]
+        diccionario = {}
+        for z in diccionario_codificado.split(","):
+            clave, valor = z.split(":")
+            diccionario[clave] = int(valor)
+        
+        # Actualizar los valores mínimo y máximo para cada clave
+        for clave, valor in diccionario.items():
+            if clave in word_value:
+                word_value[clave] = (min(word_value[clave][0], valor), max(word_value[clave][1], valor))
+            else:
+                word_value[clave] = (valor, valor)
+    
+    # Convertir el diccionario a una lista de tuplas
+    resultado_tuplas = [(clave, valores[0], valores[1]) for clave, valores in word_value.items()]
+
+    # Ordenar la lista de tuplas por clave
+    resultado_ordenado_p6 = sorted(list(resultado_tuplas))
+    return resultado_ordenado_p6
 
 
 def pregunta_07():
@@ -149,7 +237,20 @@ def pregunta_07():
     ]
 
     """
-    return
+    data = leer_data_csv()
+    word_value = {}
+
+    for i in data:
+        if int(i[1]) in word_value.keys():
+            word_value[int(i[1])][0].append(i[0])
+        else:
+            word_value[int(i[1])] = [[i[0]]]
+    # Convertir el diccionario a una lista de tuplas
+    resultado_tuplas = [(clave, valores[0]) for clave, valores in word_value.items()]
+
+    # Ordenar la lista de tuplas por clave
+    resultado_ordenado_p7 = sorted(resultado_tuplas)
+    return resultado_ordenado_p7
 
 
 def pregunta_08():
@@ -174,7 +275,21 @@ def pregunta_08():
     ]
 
     """
-    return
+    data = leer_data_csv()
+    word_value = {}
+
+    for i in data:
+        valor_columna2 = int(i[1])  # Obtener el valor de la segunda columna
+        letra_columna1 = i[0]  # Obtener la letra de la primera columna
+        # Si el valor de la segunda columna ya está en el diccionario, se agrega la letra al conjunto 
+        if valor_columna2 in word_value:
+            word_value[valor_columna2].add(letra_columna1)
+        else:
+            word_value[valor_columna2] = {letra_columna1}  # Crear un nuevo conjunto con la letra
+
+    # Convertir el diccionario en una lista de tuplas
+    lista_tuplas = sorted([(valor, sorted(list(letras))) for valor, letras in word_value.items()])
+    return lista_tuplas
 
 
 def pregunta_09():
@@ -197,7 +312,20 @@ def pregunta_09():
     }
 
     """
-    return
+    data = leer_data_csv()
+    word_value = {}
+
+    for row in data:
+        for i in row[4].split(","):
+            clave = i.split(":")[0]
+        
+            if clave in word_value.keys():
+                word_value[clave] +=1
+            else:
+                word_value[clave] = 1
+
+    registros_ordenados = dict(sorted(word_value.items()))
+    return registros_ordenados
 
 
 def pregunta_10():
@@ -218,7 +346,19 @@ def pregunta_10():
 
 
     """
-    return
+    data = leer_data_csv()
+    lista_tuplas = []
+
+    # Iterar sobre cada fila del archivo CSV
+    for i in data:
+        letra_columna1 = i[0]   # Obtener la letra de la columna 1
+        elementos_columna4 = len(i[3].split(","))  # Contar los elementos de la columna 4
+        elementos_columna5 = len(i[4].split(","))  # Contar los elementos de la columna 5
+
+        # Crear una tupla con la letra de la columna 1 y la cantidad de elementos de las columnas 4 y 5
+        tupla = (letra_columna1, elementos_columna4 , elementos_columna5)
+        lista_tuplas.append(tupla) # Agregar la tupla a la lista
+    return lista_tuplas
 
 
 def pregunta_11():
@@ -239,8 +379,20 @@ def pregunta_11():
 
 
     """
-    return
+    data = leer_data_csv()
+    suma_por_letra = {}
 
+    for row in data:
+        letra_columna4 = row[3].split(",")  # Obtener la letra de la columna 4
+        for i in letra_columna4:
+            if i in suma_por_letra.keys():
+                suma_por_letra[i] += int(row[1])
+            else:
+                suma_por_letra[i] = int(row[1])
+
+    # Ordenar el diccionario alfabéticamente por las claves
+    suma_por_letra_ordenada = dict(sorted(suma_por_letra.items()))
+    return suma_por_letra_ordenada
 
 def pregunta_12():
     """
@@ -257,4 +409,57 @@ def pregunta_12():
     }
 
     """
-    return
+    data = leer_data_csv()
+    letras = {}
+
+    for row in data:
+        values = row[4].split(",")
+        dic_values = dict((rw.split(":")[0],int(rw.split(":")[1])) for rw in values)
+        if row[0] in letras.keys():
+            letras[row[0]] += sum(dic_values.values())
+        else:
+            letras[row[0]] = sum(dic_values.values())
+
+    # Ordenar el diccionario alfabéticamente por las claves
+    suma_por_clave_ordenada = dict(sorted(letras.items()))
+    return suma_por_clave_ordenada
+
+# Llamar a la función pregunta_01 y mostrar el resultado
+if __name__ == "__main__":
+    suma = pregunta_01()
+    print(suma)
+    
+    sorted_words_p2 = pregunta_02()
+    print(sorted_words_p2)
+
+    sorted_words_p3 = pregunta_03()
+    print(sorted_words_p3)
+
+    sorted_months = pregunta_04()
+    print(sorted_months)
+
+    resultado_ordenado_p5 = pregunta_05()
+    print(resultado_ordenado_p5)
+
+    resultado_ordenado_p6 = pregunta_06()
+    print(resultado_ordenado_p6)
+
+    resultado_ordenado_p7 = pregunta_07()
+    print(resultado_ordenado_p7)
+
+    lista_tuplas = pregunta_08()
+    print (lista_tuplas)
+
+    registros_ordenados = pregunta_09()
+    print(registros_ordenados)
+
+    lista_tuplas = pregunta_10()
+    print (lista_tuplas)
+
+    suma_por_letra_ordenada = pregunta_11()
+    print (suma_por_letra_ordenada)
+
+    suma_por_clave_ordenada = pregunta_12()
+    print (suma_por_clave_ordenada)
+
+
